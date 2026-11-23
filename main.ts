@@ -8,6 +8,14 @@ import { mkdirSync, writeFileSync } from "node:fs";
 const entry =
   "I did not lose. I pioneered a bold new strategy called 'letting someone else win first so they lower their guard.' Phase one is complete. Please fund phase two.";
 
+// The gate allows 1–200 characters: refuse to emit anything outside it,
+// so a bad edit can never silently become an invalid entry.
+if (entry.length < 1 || entry.length > 200 || entry.trim().length === 0) {
+  throw new Error(
+    `entry is ${entry.length} characters, outside the 1-200 gate`,
+  );
+}
+
 // The program writes its one text to /output/entry.txt (the harness contract)
 // and also prints it, so the entry is visible either way.
 try {
